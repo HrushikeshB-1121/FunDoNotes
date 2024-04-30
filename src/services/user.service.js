@@ -6,7 +6,7 @@ dotenv.config();
 //create new user
 export const newUser = async (body) => {
 
-  
+
   const userExists= await User.findOne({email:body.email})
   
   if(userExists){

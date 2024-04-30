@@ -10,5 +10,4 @@ router.post('/signup', newUserValidator, userController.newUser);
 
 router.post('/login', userController.userLogin);
 
-
 export default router;

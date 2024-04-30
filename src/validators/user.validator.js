@@ -16,6 +16,7 @@ export const newUserValidator = (req, res, next) => {
       code: HttpStatus.BAD_REQUEST,
       message: error.message
     });
+    
   } else {
     req.validatedBody = value;
     next()

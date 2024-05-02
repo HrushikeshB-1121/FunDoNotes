@@ -6,6 +6,7 @@ import * as UserService from '../services/user.service';
 export const newUser = async (req, res) => {
   try {
     const data = await UserService.newUser(req.body);
+    // everything is correct 201 
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
       data: data,

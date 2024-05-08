@@ -1,0 +1,55 @@
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:41:51.257Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:41:53.686Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:41:55.384Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:41:57.668Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:42:04.019Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:42:06.484Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:42:18.684Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:42:20.297Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:42:22.557Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:42:27.885Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:42:30.175Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:42:33.159Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:42:35.500Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:43:03.239Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:43:05.514Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:43:47.745Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:43:50.117Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:43:55.756Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:43:58.207Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:43:59.896Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:44:02.308Z"}
+info: User created successfully {"timestamp":"2024-05-07T14:45:29.578Z"}
+error: User loggedIn unsuccessfully {"timestamp":"2024-05-07T14:45:42.388Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:47:07.290Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:47:09.728Z"}
+info: User loggedIn successfully {"timestamp":"2024-05-07T14:47:11.254Z"}
+info: User verifyed successfully {"timestamp":"2024-05-07T14:47:26.975Z"}
+info: User verifyed successfully {"timestamp":"2024-05-07T14:47:43.560Z"}
+error: Error sending email to teheshwar@gmail.com: Mail command failed: 530-5.7.0 Authentication Required. For more information, go to
+530 5.7.0  https://support.google.com/mail/?p=WantAuthError m6-20020a170902db0600b001eb542b85aasm10131646plx.117 - gsmtp {"timestamp":"2024-05-07T14:48:21.016Z"}
+info: Note created successfully {"timestamp":"2024-05-07T14:50:01.817Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:51:53.226Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:51:53.240Z"}
+info: User created successfully {"timestamp":"2024-05-07T14:52:00.600Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:52:28.256Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:52:28.264Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:52:31.803Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:53:49.849Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:53:49.858Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:53:56.301Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:55:11.992Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:55:12.002Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:55:13.696Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T14:56:37.397Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T14:56:37.404Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:56:39.516Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:56:40.505Z"}
+error: error while creating user {"timestamp":"2024-05-07T14:59:33.019Z"}
+info: User created successfully {"timestamp":"2024-05-07T15:00:02.643Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T15:05:41.855Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T15:05:41.869Z"}
+error: error while creating user {"timestamp":"2024-05-07T15:05:44.295Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-05-07T15:07:19.196Z"}
+info: Connected to the database. {"timestamp":"2024-05-07T15:07:19.207Z"}
+info: User created successfully {"timestamp":"2024-05-07T15:07:21.641Z"}

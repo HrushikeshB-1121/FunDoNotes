@@ -60,7 +60,7 @@
             }
           ],
           "responses": {
-            "201": {
+            "200": {
               "description": "successfully logged in"
             },
             "404": {
@@ -97,12 +97,11 @@
           }
         }
       },
-      "/users/resetPassword/{token}": {
+      "/users/resetPassword": {
         "put": {
           "tags": ["User"],
           "summary": "reset password for User",
           "parameters": [
-           
             {
               "name": "new password",
               "in": "body",
@@ -169,7 +168,7 @@
             }
           ],
           "responses": {
-            "201": {
+            "200": {
               "description": "notes fetched successfully"
             },
             "500": {
@@ -183,7 +182,7 @@
           ]
         }
       },
-    "/notes/{_id}" :  {
+      "/notes/{_id}":{
         "put": {
           "tags": ["Notes"],
           "summary": "Update a note for User",
@@ -202,12 +201,12 @@
               "required": false,
               "type": "string",
               "schema": {
-                "$ref": "#/definitions/Note"
+                "$ref": "#/definitions/UpdateNotes"
               }
             }
           ],
           "responses": {
-            "201": {
+            "202": {
               "description": "note updated succesfully"
             },
             "500": {
@@ -230,15 +229,10 @@
               "in": "path",
               "required": true,
               "type": "string"
-            },
-            {
-              "name": "delete a note",
-              "description": "delete a note",
-              "required": false
             }
           ],
           "responses": {
-            "201": {
+            "202": {
               "description": "Note deleted succesfully"
             },
             "500": {
@@ -266,7 +260,7 @@
             }
           ],
           "responses": {
-            "201": {
+            "202": {
               "description": "note archieved succesfully"
             },
             "500": {
@@ -294,7 +288,7 @@
             }
           ],
           "responses": {
-            "201": {
+            "202": {
               "description": "note sent to trash succesfully"
             },
             "500": {
@@ -372,6 +366,14 @@
             "type": "string"
           },
           "colour": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateNotes":{
+        "type": "object",
+        "properties": {
+          "description": {
             "type": "string"
           }
         }

@@ -9,7 +9,6 @@ export const userSignIn = async (req, res) => {
     logger.info('User created successfully');
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
-      data: data,
       message: 'User created successfully'
     });
   } catch (error) {
@@ -23,13 +22,16 @@ export const userSignIn = async (req, res) => {
 
 export const userLogin= async (req, res) => {
   try {
-    const data = await UserService.userLogin(req);
+    const user = await UserService.userLogin(req);
     logger.info('User loggedIn successfully');
     res.status(HttpStatus.OK).json({
-      success: true,
+      code: HttpStatus.OK,
       message: 'User loggedIn successfully',
-      data: data.user,
-      token: data.token
+      data: {
+        firstName: user.firstName,
+        email: user.email
+      },
+      token: user.token
     });
 
   } catch (error) {
@@ -42,35 +44,14 @@ export const userLogin= async (req, res) => {
   
 }
 
-export const verifyUser= async (req, res) => {
-  try {
-    const data = await UserService.verifyUser(res);
-    logger.info('User verifyed successfully');
-    res.status(HttpStatus.OK).json({
-      success: true,
-      message: 'User verifyed successfully',
-      data: data.user,
-      token: data.token
-    });
-
-  } catch (error) {
-    logger.error(`User failed to verify`)
-    res.status(HttpStatus.BAD_REQUEST).json({
-      code: HttpStatus.BAD_REQUEST,
-      message: error.message
-    });
-  }
-}
-
 export const forgetPassword= async (req, res) => {
   try {
     const data = await UserService.forgetPassword(req.body);
-
     res.status(HttpStatus.OK).json({
-      success: true,
-      message: 'Mail sent  Sucefully',
-      user: data.user,
-      token: data.token,
+      code: HttpStatus.OK,
+      email: data.user.email,
+      message: 'Mail sent Successfully',
+      // token: data.token,
       result:data.result.messageId
     });
 
@@ -84,13 +65,10 @@ export const forgetPassword= async (req, res) => {
 
 export const resetPassword= async (req, res) => {
   try {
-    const token=req.params.token;
-    const data = await UserService.resetPassword(token,req.body.password);
-
+    const data = await UserService.resetPassword(req.body.password,res);
     res.status(HttpStatus.OK).json({
-      success: true,
-      message: 'Reset password Sucefully',
-      data: data,
+      code: HttpStatus.OK,
+      message: 'Password Reset Successfully'
     });
 
   } catch (error) {

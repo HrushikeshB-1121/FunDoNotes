@@ -9,8 +9,8 @@ export const createNote = async (req, res) => {
     logger.info('Note created successfully');
     res.status(HttpStatus.CREATED).json({
         code: HttpStatus.CREATED,
-        title: data.title,
-        message: 'Note created successfully'
+        message: 'Note created successfully',
+        _id:data._id
     });
 } catch (error) {
     logger.error(error.message)
@@ -28,7 +28,6 @@ export const archiveNote = async (req, res) => {
     logger.info('Note Archive changed successfully')
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
-      archived: data.archived,
       message: 'Note Archive changed successfully'
     });
   } catch (error) {
@@ -46,7 +45,6 @@ export const isTrashedNote = async (req, res) => {
     logger.info('Note Trash changed successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
-      trashed: data.trashed,
       message: 'Note Trash changed successfully'
     });
   } catch (error) {
@@ -57,13 +55,12 @@ export const isTrashedNote = async (req, res) => {
   }
 };
 
-export const updateDesc = async (req, res) => {
+export const updateNote = async (req, res) => {
   try {
-    const data = await NoteService.updateDesc(req,res);
+    const data = await NoteService.updateNote(req,res);
     logger.info('Note updated successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
-      data: data,
       message: 'Note updated successfully'
     });
   } catch (error) {
@@ -78,9 +75,8 @@ export const deleteNote = async (req, res) => {
   try {
     const data = await NoteService.deleteNote(req,res);
     logger.info('Note Deleted successfully');
-    res.status(HttpStatus.NO_CONTENT).json({
-      code: HttpStatus.NO_CONTENT,
-      title: data.title,
+    res.status(HttpStatus.OK).json({
+      code: HttpStatus.OK,
       message: 'Note Deleted successfully'
     });
   } catch (error) {
@@ -97,7 +93,10 @@ export const getAllNote = async (req, res) => {
       const data = await NoteService.getAllNote(req,res);
       const text = data.map(item => ({
         title: item.title,
-        description: item.description
+        description: item.description,
+        colour: item.colour,
+        archived: item.archived,
+        trashed: item.trashed
       }))
       logger.info( 'Displayed all notes successfully');
       res.status(HttpStatus.OK).json({

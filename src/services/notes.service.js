@@ -44,21 +44,20 @@ export const deleteNote=async (req,res)=>{
     if (note && note.trashed) {
         return Note.findByIdAndDelete(req.params._id);
     } else {
-        throw new Error("Note is not trashed");
+        throw new Error("Note is not trashed or not found");
     }
-    // if(!note){
-    //     throw new Error('User Id is Invalid');
-    // }
-    // return await note;
 }
 
-export const updateDesc=async (req,res)=>{
-    const {description}=req.body;
+export const updateNote=async (req,res)=>{
     const note = await Note.findById(req.params._id)
     if(!note){
         throw new Error('User Id is Invalid');
     }
-    note.description=description;
+    note.title = (req.body.title != "") ?req.body.title : note.title ;
+    note.description = (req.body.description!= "") ?req.body.description : note.description ;
+    note.colour = (req.body.colour != "") ?req.body.colour : note.colour ;
+    // note.title = (req.body.title != "") ?req.body.title : note.title
+    // note.description=description;
     return await note.save();
 }
 

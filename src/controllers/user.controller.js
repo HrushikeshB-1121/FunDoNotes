@@ -22,20 +22,20 @@ export const userSignIn = async (req, res) => {
 
 export const userLogin= async (req, res) => {
   try {
-    const user = await UserService.userLogin(req);
+    const data = await UserService.userLogin(req);
     logger.info('User loggedIn successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       message: 'User loggedIn successfully',
       data: {
-        firstName: user.firstName,
-        email: user.email
+        firstName: data.user.firstName,
+        email: data.user.email,
+        token: data.token
       },
-      token: user.token
     });
 
   } catch (error) {
-    logger.error(`User loggedIn unsuccessfully`)
+    logger.error(`User login failed`)
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,
       message: error.message
@@ -70,7 +70,6 @@ export const resetPassword= async (req, res) => {
       code: HttpStatus.OK,
       message: 'Password Reset Successfully'
     });
-
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,

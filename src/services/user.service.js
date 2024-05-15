@@ -2,7 +2,7 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import sendmail from '../middlewares/email'
+import sendmail from '../utils/email'
 import logger from '../config/logger';
 
 dotenv.config();
@@ -41,7 +41,6 @@ export const forgetPassword= async ({email}) => {
   if(!user)
   throw new Error("This email is does not Exits")
   const token = jwt.sign({ userId: user._id }, resetkey, { expiresIn: '10m' });
-  console.log(token);
   const result= await sendmail(user.email,token)
   return { user ,token ,result };
 };

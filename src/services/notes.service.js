@@ -1,5 +1,8 @@
 import { Error } from 'mongoose';
 import Note from '../models/notes.model';
+const Redis = require("ioredis");
+
+const redis = new Redis();
 
 
 // creates note
@@ -8,6 +11,7 @@ export const createNote=async (req,res)=>{
     const {body}=req
     body.createdBy=res.locals.userId;
     const data = await Note.create(body);
+    await redis.sadd(`userId:${res.locals.userId}`,JSON.stringify(data)); 
     return data
 }
 
@@ -18,7 +22,9 @@ export const archiveNote=async (req,res)=>{
         throw new Error('User Id is Invalid');
     }
     note.archived= !note.archived;
-    return await note.save();
+    await note.save();
+    await getAllNote(req,res);
+    return ;
 }
 
 export const getAllNote=async (req,res)=>{
@@ -26,6 +32,8 @@ export const getAllNote=async (req,res)=>{
     if(!note){
         throw new Error('User Id is Invalid');
     }
+    await redis.del(`userId:${res.locals.userId}`);
+    await redis.sadd(`userId:${res.locals.userId}`,JSON.stringify(note));
     return await note;
 }
 
@@ -35,14 +43,19 @@ export const isTrashedNote=async (req,res)=>{
         throw new Error('User Id is Invalid');
     }
     note.trashed=!note.trashed;
-    return await note.save();
+    await note.save();
+    await getAllNote(req,res);
+    return ;
 }
 
 export const deleteNote=async (req,res)=>{
     // const note = await Note.deleteNoteById(req.params._id)
     const note = await Note.findById(req.params._id);
     if (note && note.trashed) {
-        return Note.findByIdAndDelete(req.params._id);
+        await Note.findByIdAndDelete(req.params._id);
+        await redis.del(`userId:${res.locals.userId}`);
+        await getAllNote(req,res);
+        return;
     } else {
         throw new Error("Note is not trashed or not found");
     }
@@ -56,8 +69,8 @@ export const updateNote=async (req,res)=>{
     note.title = (req.body.title != "") ?req.body.title : note.title ;
     note.description = (req.body.description!= "") ?req.body.description : note.description ;
     note.colour = (req.body.colour != "") ?req.body.colour : note.colour ;
-    // note.title = (req.body.title != "") ?req.body.title : note.title
-    // note.description=description;
-    return await note.save();
+    await note.save();
+    await getAllNote(req,res);
+    return ;
 }
 

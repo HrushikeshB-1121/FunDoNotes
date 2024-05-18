@@ -1,5 +1,6 @@
 import { Error } from 'mongoose';
 import Note from '../models/notes.model';
+import { clearRedisUser,addToRedis,getRedisAllNotes,getRedisNote,delNoteRedis } from '../utils/redis';
 const Redis = require("ioredis");
 
 const redis = new Redis();
@@ -11,66 +12,85 @@ export const createNote=async (req,res)=>{
     const {body}=req
     body.createdBy=res.locals.userId;
     const data = await Note.create(body);
-    await redis.sadd(`userId:${res.locals.userId}`,JSON.stringify(data)); 
-    return data
+    await addToRedis(res.locals.userId,data);
+    return data._id;
 }
 
 // archive note 
 export const archiveNote=async (req,res)=>{
-    const note = await Note.findById(req.params._id)
-    if(!note){
-        throw new Error('User Id is Invalid');
-    }
-    note.archived= !note.archived;
-    await note.save();
-    await getAllNote(req,res);
-    return ;
+    const _id = req.params._id;
+    const userId = res.locals.userId;
+    let note = await getRedisNote(userId,_id);
+    if(note===null)
+        throw new Error('Note not found')
+    note.archived = !note.archived
+    note = await Note.findByIdAndUpdate(
+        {
+            _id
+        },
+        note,
+        {
+            new: true
+        }
+    )
+    await delNoteRedis(userId,_id);
+    await addToRedis(userId,note);
 }
 
 export const getAllNote=async (req,res)=>{
-    const note = await Note.find({createdBy:res.locals.userId})
-    if(!note){
-        throw new Error('User Id is Invalid');
-    }
-    await redis.del(`userId:${res.locals.userId}`);
-    await redis.sadd(`userId:${res.locals.userId}`,JSON.stringify(note));
-    return await note;
+    return await getRedisAllNotes(res.locals.userId);
 }
 
 export const isTrashedNote=async (req,res)=>{
-    const note = await Note.findById(req.params._id)
-    if(!note){
-        throw new Error('User Id is Invalid');
-    }
+    const _id = req.params._id;
+    const userId = res.locals.userId;
+    let note = await getRedisNote(userId,_id);
+    if(note===null)
+        throw new Error('Note not found')
     note.trashed=!note.trashed;
-    await note.save();
-    await getAllNote(req,res);
-    return ;
+    note = await Note.findByIdAndUpdate(
+        {
+            _id
+        },
+        note,
+        {
+            new: true
+        }
+    )
+    await delNoteRedis(userId,_id);
+    await addToRedis(userId,note);
 }
 
 export const deleteNote=async (req,res)=>{
-    // const note = await Note.deleteNoteById(req.params._id)
-    const note = await Note.findById(req.params._id);
-    if (note && note.trashed) {
-        await Note.findByIdAndDelete(req.params._id);
-        await redis.del(`userId:${res.locals.userId}`);
-        await getAllNote(req,res);
-        return;
-    } else {
-        throw new Error("Note is not trashed or not found");
-    }
+    const _id = req.params._id;
+    const userId = res.locals.userId;
+    const note = await getRedisNote(userId,_id);
+    if(note===null)
+    throw new Error('Note not found')
+    await Note.findOneAndDelete(
+        {
+            _id, createdBy: userId
+        }
+    )
+    await delNoteRedis(userId,_id);
 }
 
-export const updateNote=async (req,res)=>{
-    const note = await Note.findById(req.params._id)
-    if(!note){
-        throw new Error('User Id is Invalid');
-    }
-    note.title = (req.body.title != "") ?req.body.title : note.title ;
-    note.description = (req.body.description!= "") ?req.body.description : note.description ;
-    note.colour = (req.body.colour != "") ?req.body.colour : note.colour ;
-    await note.save();
-    await getAllNote(req,res);
-    return ;
+export const updateNote=async (req,body,res)=>{
+    const _id = req.params._id;
+    const userId = res.locals.userId;
+    let note = await getRedisNote(userId,_id);
+    if(note===null)
+        throw new Error('Note not found')
+    note = await Note.findOneAndUpdate(
+        {
+            _id, createdBy: userId
+        },
+        body,
+        {
+            new: true
+        }
+    )
+    await delNoteRedis(userId,_id);
+    await addToRedis(userId,note);
 }
 

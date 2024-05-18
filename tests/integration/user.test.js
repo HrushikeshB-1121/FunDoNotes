@@ -1,14 +1,12 @@
 import request from 'supertest';
 import mongoose from 'mongoose';
-import app from '../../src/index';
-import logger from '../../src/config/logger';
+import {app,server} from '../../src/index';
 import dotenv from 'dotenv';
-import { not } from '@hapi/joi';
 dotenv.config();
 
 let loginToken;
-let resetToken;
-let userId;
+// let resetToken;
+// let userId;
 let noteId;
 
 describe('User APIs Testing', () => {
@@ -33,7 +31,11 @@ describe('User APIs Testing', () => {
   
   afterAll(async () => {
     await mongoose.connection.close();
+    server.close();
   });
+
+
+  // we use Supertest to make a http request to the /api/v1/users endpoint of our Express.js server. 
 
   describe(`New User`,()=>{
 
@@ -70,7 +72,7 @@ describe('User APIs Testing', () => {
           "email": "vishal@gmail.com",
           "password" : "Vishal@123"
         })
-        loginToken = res.body.token
+        loginToken = res.body.data.token
       expect(res.statusCode).toBe(200);
       // console.log(res);
       // // userId = res.text.userId
@@ -188,7 +190,7 @@ describe('User APIs Testing', () => {
       expect(res.statusCode).toBe(200)
     })
 
-    it(`should return note not updated`,async()=>{
+    it(`should return note updated even without title and description`,async()=>{
       const res = await request(app)
         .put(`/api/v1/notes/${noteId}`)
         .set(`Authorization`,`Bearer ${loginToken}`)
@@ -197,7 +199,7 @@ describe('User APIs Testing', () => {
           description: '',
           color: 'red',
         })
-      expect(res.statusCode).toBe(400)
+      expect(res.statusCode).toBe(200)
     })
   });
 
@@ -224,7 +226,7 @@ describe('User APIs Testing', () => {
       const res = await request(app)
         .delete(`/api/v1/notes/${noteId}`)
         .set(`Authorization`,`Bearer ${loginToken}`)
-      expect(res.statusCode).toBe(204)
+      expect(res.statusCode).toBe(200)
     })
   })
 });

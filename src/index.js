@@ -14,10 +14,10 @@ import {
 } from './middlewares/error.middleware';
 import logger from './config/logger';
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./config/swagger.json');
+const swaggerDocument = require('./utils/swagger.json');
 
 
-const app = express();
+export const app = express();
 const host = process.env.APP_HOST;
 const port = process.env.APP_PORT;
 const api_version = process.env.API_VERSION;
@@ -34,12 +34,8 @@ app.use(appErrorHandler);
 app.use(genericErrorHandler);
 app.use(notFound);
 
-const server = app.listen(port, () => {
+export const server = app.listen(port, () => {
   logger.info(`Server started at ${host}:${port}/api/${api_version}/`);
 });
 
-afterAll(() => {
-  server.close();
-});
-
-export default app;
+// export default app;

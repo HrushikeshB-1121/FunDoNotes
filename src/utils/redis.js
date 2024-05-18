@@ -1,38 +1,31 @@
 const Redis = require("ioredis");
-const { error } = require("winston");
-import HttpStatus from 'http-status-codes';
 const redis = new Redis();
 
-// userId = "sai@gnail.com";
-export const  getAllNotes = async function (req,res,next){
-
-  try {
-
-    const rData = await redis.smembers(`userId:${res.locals.userId}`);
-    redis.exists(`userId:${res.locals.userId}`,(err,reply)=>{
-      if(err){
-          console.error('Error:', err);
-          return;
-      }
-  
-      if (reply === 1) {
-            console.log('Data fetched from redis');
-            res.status(HttpStatus.OK).json({
-              code: HttpStatus.OK,
-              data: rData.map(jsonString => JSON.parse(jsonString)),
-              message: 'Displayed all notes successfully from redis'
-            });
-        } else {
-          console.log('data not exist in redis, fetching from database.......');
-          next();
-        }
-  
-    })
-  }
-
-  catch(err){
-    console.log(err);
-  }
+export async function clearRedisUser (userId){
+    await redis.del(`userId:${userId}`)
 }
 
-// getAllNotes();
+export async function addToRedis(userId,notes){
+  console.log("note added to redis");
+  await redis.sadd(`userId:${userId}`,JSON.stringify(notes));
+}
+
+export async function getRedisAllNotes(userId){
+  console.log("getting all notes from redis");
+  const rData = await redis.smembers(`userId:${userId}`);
+  const data = rData.map(jsonString => JSON.parse(jsonString));
+  return data;
+}
+export async function getRedisNote(userId,noteId){
+  console.log("getting note from redis");
+  const getAllNotes = await getRedisAllNotes(userId);
+  const notes = Object.values(getAllNotes)
+  return notes.find((note)=>{
+    return note._id===noteId;
+  })
+}
+export async function delNoteRedis(userId,noteId){
+  console.log("deleting note in redis");
+  const note = await getRedisNote(userId,noteId);
+  await redis.srem(`userId:${userId}`,JSON.stringify(note));
+}

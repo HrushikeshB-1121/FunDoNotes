@@ -5,7 +5,7 @@ import logger from '../config/logger';
 
 export const userSignIn = async (req, res) => {
   try {
-    const data = await UserService.userSignIn(req);
+    const data = await UserService.userSignIn(req.body);
     logger.info('User created successfully');
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
@@ -22,7 +22,7 @@ export const userSignIn = async (req, res) => {
 
 export const userLogin= async (req, res) => {
   try {
-    const data = await UserService.userLogin(req);
+    const data = await UserService.userLogin(req.body);
     logger.info('User loggedIn successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -46,12 +46,12 @@ export const userLogin= async (req, res) => {
 
 export const forgetPassword= async (req, res) => {
   try {
-    const data = await UserService.forgetPassword(req.body);
+    const data = await UserService.forgetPassword(req.body.email);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       email: data.user.email,
+      token: data.token,
       message: 'Mail sent Successfully',
-      // token: data.token,
       result:data.result.messageId
     });
 
@@ -65,7 +65,7 @@ export const forgetPassword= async (req, res) => {
 
 export const resetPassword= async (req, res) => {
   try {
-    const data = await UserService.resetPassword(req.body.password,res);
+    const data = await UserService.resetPassword(req.body.password,req.userId);
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
       message: 'Password Reset Successfully'

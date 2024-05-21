@@ -1,10 +1,6 @@
 const Redis = require("ioredis");
 const redis = new Redis();
 
-export async function clearRedisUser (userId){
-    await redis.del(`userId:${userId}`)
-}
-
 export async function addToRedis(userId,notes){
   console.log("note added to redis");
   await redis.sadd(`userId:${userId}`,JSON.stringify(notes));
@@ -29,3 +25,8 @@ export async function delNoteRedis(userId,noteId){
   const note = await getRedisNote(userId,noteId);
   await redis.srem(`userId:${userId}`,JSON.stringify(note));
 }
+
+// afterAll(async () => {
+//   // Close the Redis connection after all tests have completed
+//   await redis.quit();
+// });

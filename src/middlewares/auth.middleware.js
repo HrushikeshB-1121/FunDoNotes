@@ -14,25 +14,26 @@ const Resetkey = process.env.RESET_KEY;
  * @param {Object} res
  * @param {Function} next
  */
-export const userAuth = async (req, res, next) => {
+export const userAuth = async (req,res, next) => {
   try {
-    const bearerToken = req.headers.authorization.split(" ")[1];
+    const bearerToken = req.headers.authorization.split(` `)[1];
     if (!bearerToken) {
       throw new Error('Token Not provided');
     }
-    const {userId}= await jwt.verify(bearerToken, key);
-    res.locals.userId = userId;
-    res.locals.token = bearerToken;
+    const userdetails = await jwt.verify(bearerToken, key);
+    req.body.createdBy = userdetails.userId;
     next();
   } catch (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success: false,
+      message: `${error}`
+    });
   }
 };
 
 export const forgetUserAuth = async(req,res,next) => {
   try{
     const resetToken = req.headers.authorization.split(" ")[1];
-    console.log(resetToken);
     if(!resetToken){
       throw new Error('Reset Token Not provided');
     }

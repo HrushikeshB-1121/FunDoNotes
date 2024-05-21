@@ -1,25 +1,16 @@
 import { Error } from 'mongoose';
 import Note from '../models/notes.model';
-import { clearRedisUser,addToRedis,getRedisAllNotes,getRedisNote,delNoteRedis } from '../utils/redis';
-const Redis = require("ioredis");
-
-const redis = new Redis();
-
+import { addToRedis,getRedisAllNotes,getRedisNote,delNoteRedis } from '../utils/redis';
 
 // creates note
-export const createNote=async (req,res)=>{
-    // adding the userid to note
-    const {body}=req
-    body.createdBy=res.locals.userId;
-    const data = await Note.create(body);
-    await addToRedis(res.locals.userId,data);
+export const createNote=async (noteDetails)=>{
+    const data = await Note.create(noteDetails);
+    await addToRedis(noteDetails.createdBy,data);
     return data._id;
 }
 
 // archive note 
-export const archiveNote=async (req,res)=>{
-    const _id = req.params._id;
-    const userId = res.locals.userId;
+export const archiveNote=async (userId,_id)=>{
     let note = await getRedisNote(userId,_id);
     if(note===null)
         throw new Error('Note not found')
@@ -37,13 +28,11 @@ export const archiveNote=async (req,res)=>{
     await addToRedis(userId,note);
 }
 
-export const getAllNote=async (req,res)=>{
-    return await getRedisAllNotes(res.locals.userId);
+export const getAllNote=async (userId)=>{
+    return await getRedisAllNotes(userId);
 }
 
-export const isTrashedNote=async (req,res)=>{
-    const _id = req.params._id;
-    const userId = res.locals.userId;
+export const isTrashedNote=async (userId,_id)=>{
     let note = await getRedisNote(userId,_id);
     if(note===null)
         throw new Error('Note not found')
@@ -61,9 +50,7 @@ export const isTrashedNote=async (req,res)=>{
     await addToRedis(userId,note);
 }
 
-export const deleteNote=async (req,res)=>{
-    const _id = req.params._id;
-    const userId = res.locals.userId;
+export const deleteNote=async (userId,_id)=>{
     const note = await getRedisNote(userId,_id);
     if(note===null)
     throw new Error('Note not found')
@@ -75,9 +62,7 @@ export const deleteNote=async (req,res)=>{
     await delNoteRedis(userId,_id);
 }
 
-export const updateNote=async (req,body,res)=>{
-    const _id = req.params._id;
-    const userId = res.locals.userId;
+export const updateNote=async (userId,_id,updatedNotes)=>{
     let note = await getRedisNote(userId,_id);
     if(note===null)
         throw new Error('Note not found')
@@ -85,7 +70,7 @@ export const updateNote=async (req,body,res)=>{
         {
             _id, createdBy: userId
         },
-        body,
+        updatedNotes,
         {
             new: true
         }

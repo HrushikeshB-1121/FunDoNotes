@@ -2,15 +2,16 @@ import HttpStatus from 'http-status-codes';
 import * as NoteService from '../services/notes.service';
 import logger from '../config/logger';
 
+
 // Displays the status of note creation
 export const createNote = async (req, res) => {
   try {
-    const data = await NoteService.createNote(req,res);
+    const data = await NoteService.createNote(req.body);
     logger.info('Note created successfully');
     res.status(HttpStatus.CREATED).json({
         code: HttpStatus.CREATED,
         message: 'Note created successfully',
-        _id:data._id
+        _id:data
     });
 } catch (error) {
     logger.error(error.message)
@@ -24,7 +25,7 @@ export const createNote = async (req, res) => {
 // Displays the status of note archive
 export const archiveNote = async (req, res) => {
   try {
-    const data = await NoteService.archiveNote(req,res);
+    const data = await NoteService.archiveNote(req.body.createdBy,req.params._id);
     logger.info('Note Archive changed successfully')
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -41,7 +42,7 @@ export const archiveNote = async (req, res) => {
 // Displays the status of note trash
 export const isTrashedNote = async (req, res) => {
   try {
-    const data = await NoteService.isTrashedNote(req,res);
+    const data = await NoteService.isTrashedNote(req.body.createdBy,req.params._id);
     logger.info('Note Trash changed successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -57,7 +58,7 @@ export const isTrashedNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   try {
-    const data = await NoteService.updateNote(req,res);
+    const data = await NoteService.updateNote(req.body.createdBy,req.params._id,req.body);
     logger.info('Note updated successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -73,7 +74,7 @@ export const updateNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   try {
-    const data = await NoteService.deleteNote(req,res);
+    const data = await NoteService.deleteNote(req.body.createdBy,req.params._id);
     logger.info('Note Deleted successfully');
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
@@ -90,7 +91,7 @@ export const deleteNote = async (req, res) => {
 
 export const getAllNote = async (req, res) => {
     try {
-      const data = await NoteService.getAllNote(req,res);
+      const data = await NoteService.getAllNote(req.body.createdBy);
       const text = data.map(item => ({
         title: item.title,
         description: item.description,

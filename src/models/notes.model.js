@@ -10,7 +10,8 @@ const noteSchema = new Schema(
             type: String
         },
         createdBy: {
-            type: String
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
         colour: {
             type: String,

@@ -41,7 +41,7 @@ async function sendEmail(email, token) {
         html: `<h1>Password Reset</h1>
       <p>Go to the link to proceed with your password reset</p>
       <p>the token is:${token} </p>
-    //   <a href="http://localhost:3000/api/v1/users/resetPassword">Reset Password</a>
+      <a href="http://localhost:3000/api/v1/users/resetPassword">Reset Password</a>
       `,
     };
 

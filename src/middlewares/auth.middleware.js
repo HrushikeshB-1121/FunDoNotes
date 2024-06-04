@@ -37,9 +37,8 @@ export const forgetUserAuth = async(req,res,next) => {
     if(!resetToken){
       throw new Error('Reset Token Not provided');
     }
-    const {userId}= await jwt.verify(resetToken, Resetkey);
-    res.locals.userId = userId;
-    res.locals.resetToken = resetToken;
+    const forgetuserdetails= await jwt.verify(resetToken, Resetkey);
+    req.userId = forgetuserdetails.userId;
     next();
   } catch (error) {
     next(error);

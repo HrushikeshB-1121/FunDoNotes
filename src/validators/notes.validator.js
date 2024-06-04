@@ -3,9 +3,10 @@ import HttpStatus from 'http-status-codes';
 
   export const noteDetailsValidator = (req,res,next)=>{
     const schema = Joi.object({
-        title: Joi.string().min(1).required(),
+        title: Joi.string().required(),
         description: Joi.string().required(),
-        colour: Joi.string().optional()
+        colour: Joi.string().optional(),
+        createdBy: Joi.string().required()
     });
     const { error, value } = schema.validate(req.body);
     if (error) {
@@ -14,7 +15,6 @@ import HttpStatus from 'http-status-codes';
         message: error.message
       });
     } else {
-      req.validatedBody = value;
-      next()
+      next();
     }
   }

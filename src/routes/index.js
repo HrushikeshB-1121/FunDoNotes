@@ -10,10 +10,10 @@ import notesRoute from './notes.route';
  */
 const routes = () => {
 
-  // route for userCreation, login and token
+  //  for userCreation, login and token
   router.use('/users', userRoute);
   
-  // route for notes creation, archive and trash
+  // for notes creation, archive and trash
   router.use('/notes', notesRoute);
 
   return router;

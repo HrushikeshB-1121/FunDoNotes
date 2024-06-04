@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import sendmail from '../utils/email'
 import logger from '../config/logger';
+import { init } from '../utils/kafka/producer';
+import { consumerInit } from '../utils/kafka/consumer';
 
 dotenv.config();
 const key = process.env.SECRET_KEY;
@@ -11,6 +13,13 @@ const resetkey = process.env.RESET_KEY;
 
 
 export const userSignIn = async (body) => {
+  await init(req.body)
+    await consumerInit().then(data => {
+      console.log('Received data:', data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   const email = body.email.toLowerCase();
   const userExists = await User.findOne({ email: email });
   if (userExists) {
